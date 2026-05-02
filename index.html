@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toolbox Meeting - SPGroup Tengah Operations</title>
+  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.5/dist/signature_pad.umd.min.js"></script>
+  <style>
+    :root {
+      --sp-blue: #0066b3;
+      --sp-teal: #00a9ce;
+      --success: #28a745;
+      --danger: #dc3545;
+      --warning: #ffc107;
+      --gray: #6c757d;
+      --light-gray: #f8f9fa;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 1rem;
+      background: #f0f4f8;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .form-container {
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 3px solid var(--sp-blue);
+    }
+    
+    .form-title {
+      color: var(--sp-blue);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.4;
+    }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: var(--light-gray);
+      border-radius: 6px;
+    }
+    
+    .info-field {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .info-field label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--sp-blue);
+      margin-bottom: 0.3rem;
+    }
+    
+    .info-field input, .info-field select, .info-field textarea {
+      padding: 0.5rem;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+    
+    .info-field input:focus, .info-field select:focus, .info-field textarea:focus {
+      outline: none;
+      border-color: var(--sp-teal);
+      box-shadow: 0 0 0 3px rgba(0,169,206,0.1);
+    }
+    
+    .info-field small {
+      color: var(--gray);
+      font-size: 0.75rem;
+      margin-top: 0.2rem;
+    }
+    
+    /* Yes/No Button Group */
+    .yesno-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .yesno-btn {
+      padding: 0.4rem 1.2rem;
+      border: 2px solid #dee2e6;
+      border-radius: 20px;
+      background: white;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    
+    .yesno-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .yesno-btn.yes { background: #d4edda; border-color: var(--success); color: #155724; }
+    .yesno-btn.no { background: #f8d7da; border-color: var(--danger); color: #721c24; }
+    
+    .yesno-btn.active.yes { background: var(--success); color: white; }
+    .yesno-btn.active.no { background: var(--danger); color: white; }
+    
+    /* PPE Section */
+    .ppe-section {
+      background: var(--light-gray);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .ppe-section h3 {
+      color: var(--sp-blue);
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--sp-teal);
+    }
+    
+    .ppe-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .ppe-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #e9ecef;
+      font-size: 0.9rem;
+    }
+    
+    .ppe-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .ppe-letter {
+      font-weight: 700;
+      color: var(--sp-blue);
+      margin-right: 0.5rem;
+    }
+    
+    /* Personnel Table */
+    .personnel-section {
+      margin: 2rem 0;
+    }
+    
+    .personnel-section h3 {
+      color: var(--sp-blue);
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--sp-teal);
+    }
+    
+    .personnel-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .personnel-table th {
+      background: var(--sp-blue);
+      color: white;
+      padding: 0.75rem;
+      text-align: left;
+      font-size: 0.85rem;
+    }
+    
+    .personnel-table th:first-child {
+      width: 60px;
+      text-align: center;
+    }
+    
+    .personnel-table th:last-child {
+      width: 150px;
+      text-align: center;
+    }
+    
+    .personnel-table td {
+      padding: 0.5rem;
+      border-bottom: 1px solid #dee2e6;
+    }
+    
+    .personnel-table td:first-child {
+      text-align: center;
+      font-weight: 600;
+      color: var(--sp-blue);
+    }
+    
+    .personnel-table input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    
+    .add-personnel-btn {
+      background: var(--sp-teal);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      margin-top: 1rem;
+      transition: all 0.2s;
+    }
+    
+    .add-personnel-btn:hover {
+      background: #0095b8;
+      transform: translateY(-1px);
+    }
+    
+    /* Hazard Topics */
+    .hazard-section {
+      margin: 2rem 0;
+    }
+    
+    .hazard-section h3 {
+      color: var(--sp-blue);
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--sp-teal);
+    }
+    
+    .hazard-item {
+      background: white;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .hazard-item h4 {
+      font-size: 0.95rem;
+      color: #333;
+      margin-bottom: 0.75rem;
+    }
+    
+    .hazard-remarks {
+      margin-top: 0.5rem;
+    }
+    
+    .hazard-remarks label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #495057;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    
+    .hazard-remarks textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      min-height: 50px;
+      resize: vertical;
+    }
+    
+    .other-topics {
+      margin-top: 1.5rem;
+    }
+    
+    .other-topics label {
+      font-weight: 700;
+      color: var(--sp-blue);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    
+    .other-topics textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    /* Disclaimer */
+    .disclaimer {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 6px;
+      padding: 1rem;
+      margin: 2rem 0;
+      font-size: 0.85rem;
+      color: #856404;
+    }
+    
+    .disclaimer strong {
+      color: #664d03;
+    }
+    
+    /* Signature Section */
+    .signature-section {
+      margin: 2rem 0;
+      padding-top: 2rem;
+      border-top: 2px solid #dee2e6;
+    }
+    
+    .signature-field {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .signature-field label {
+      font-weight: 700;
+      color: var(--sp-blue);
+      margin-bottom: 0.5rem;
+    }
+    
+    .signature-canvas-wrapper {
+      position: relative;
+      border: 2px solid #ced4da;
+      border-radius: 6px;
+      background: white;
+      overflow: hidden;
+    }
+    
+    .signature-canvas {
+      width: 100%;
+      height: 150px;
+      touch-action: none;
+      cursor: crosshair;
+      display: block;
+    }
+    
+    .signature-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    
+    .btn-clear-signature {
+      background: var(--gray);
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    
+    .btn-clear-signature:hover {
+      background: #5a6268;
+    }
+    
+    .signature-confirmation {
+      display: none;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      border-radius: 4px;
+      color: #155724;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    .signature-confirmation.visible {
+      display: block;
+    }
+    
+    /* Photo Section */
+    .photo-section {
+      background: var(--light-gray);
+      border-radius: 6px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    
+    .photo-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    
+    .photo-section-title {
+      font-weight: 600;
+      color: var(--sp-blue);
+      font-size: 0.9rem;
+    }
+    
+    .btn-add-photo {
+      background: var(--sp-teal);
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .btn-add-photo:hover {
+      background: #0095b8;
+      transform: translateY(-1px);
+    }
+    
+    .photo-entry {
+      background: white;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      padding: 0.75rem;
+      margin-bottom: 0.75rem;
+      position: relative;
+    }
+    
+    .btn-remove-photo {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: var(--danger);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    
+    .btn-remove-photo:hover {
+      background: #c82333;
+    }
+    
+    .photo-upload-wrapper {
+      margin-bottom: 0.5rem;
+    }
+    
+    .photo-upload-label {
+      display: block;
+      padding: 0.75rem;
+      border: 2px dashed #ced4da;
+      border-radius: 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: #fafbfc;
+    }
+    
+    .photo-upload-label:hover {
+      border-color: var(--sp-teal);
+      background: #e7f3f8;
+    }
+    
+    .photo-upload-input {
+      display: none;
+    }
+    
+    .upload-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    .upload-text {
+      color: var(--gray);
+      font-size: 0.8rem;
+    }
+    
+    .photo-preview {
+      margin-top: 0.5rem;
+      display: none;
+      text-align: center;
+    }
+    
+    .photo-preview img {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 4px;
+      border: 1px solid #dee2e6;
+    }
+    
+    .photo-info {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-top: 0.25rem;
+    }
+    
+    .photo-comment {
+      margin-top: 0.5rem;
+    }
+    
+    .photo-comment label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #495057;
+    }
+    
+    .photo-comment textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      min-height: 40px;
+      resize: vertical;
+    }
+    
+    .compressing {
+      color: var(--warning);
+      font-weight: 600;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .btn {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: all 0.3s;
+      min-width: 200px;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .btn-print {
+      background: var(--sp-blue);
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,102,179,0.3);
+    }
+    
+    .btn-print:hover {
+      box-shadow: 0 6px 16px rgba(0,102,179,0.4);
+    }
+    
+    @media (max-width: 768px) {
+      .form-container { padding: 1rem; }
+      .form-title { font-size: 1.1rem; }
+      .info-grid { grid-template-columns: 1fr; }
+      .btn { width: 100%; min-width: auto; }
+      .personnel-table { font-size: 0.85rem; }
+    }
+    
+    @media print {
+      body { background: white; }
+      .form-container { box-shadow: none; padding: 1rem; }
+      .btn, .photo-upload-label, .btn-add-photo, .btn-remove-photo, .signature-actions, .add-personnel-btn { display: none !important; }
+      .photo-entry { break-inside: avoid; }
+      .photo-upload-input { display: none !important; }
+      .hazard-item { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div class="header">
+      <h1 class="form-title">SPGroup Tengah Operations - Toolbox Meeting for Working Personnel / Risk Assessment Communication</h1>
+    </div>
+    
+    <div class="info-grid">
+      <div class="info-field">
+        <label>RA Title:</label>
+        <input type="text" id="ra-title" placeholder="Enter RA Title">
+      </div>
+      <div class="info-field">
+        <label>RA Doc No.:</label>
+        <input type="text" id="ra-doc-no" placeholder="Enter RA Document Number">
+      </div>
+      <div class="info-field">
+        <label>Work Description:</label>
+        <input type="text" id="work-description" placeholder="Describe the work">
+      </div>
+      <div class="info-field">
+        <label>Sub Location:</label>
+        <input type="text" id="sub-location" placeholder="Enter sub location">
+      </div>
+      <div class="info-field">
+        <label>Person in Charge:</label>
+        <input type="text" id="person-in-charge" placeholder="Enter name">
+      </div>
+      <div class="info-field">
+        <label>Designation:</label>
+        <select id="designation">
+          <option value="">-Select-</option>
+          <option value="Technician">Technician</option>
+          <option value="Supervisor">Supervisor</option>
+          <option value="Technical Officer">Technical Officer</option>
+          <option value="Senior Technical Officer">Senior Technical Officer</option>
+          <option value="Manager">Manager</option>
+          <option value="Engineer">Engineer</option>
+        </select>
+      </div>
+      <div class="info-field">
+        <label>Date:</label>
+        <input type="date" id="meeting-date">
+      </div>
+      <div class="info-field">
+        <label>Contractor/Sub-Contractor:</label>
+        <input type="text" id="contractor" placeholder="Enter contractor name">
+        <small>Leave blank if internal</small>
+      </div>
+    </div>
+    
+    <!-- PPE Categories -->
+    <div class="ppe-section">
+      <h3>Categories of PPE:</h3>
+      <ul class="ppe-list">
+        <li><span class="ppe-letter">a)</span> Head Protection - Safe Helmet, Chin Strap, etc.</li>
+        <li><span class="ppe-letter">b)</span> Hearing Protection - Ear Muffler, Plug, etc.</li>
+        <li><span class="ppe-letter">c)</span> Eye Protection - Safety Glass, Goggles, etc.</li>
+        <li><span class="ppe-letter">d)</span> Respiratory Protection - Half Face Respirator, Dust Mask, etc.</li>
+        <li><span class="ppe-letter">e)</span> Face Protection - Face Shield, etc.</li>
+        <li><span class="ppe-letter">f)</span> Hand Protection - Gloves, etc.</li>
+        <li><span class="ppe-letter">g)</span> Foot Protection - Safety Shoe, Rubber Shoe, etc.</li>
+        <li><span class="ppe-letter">h)</span> Fall Protection - Safety Harness, Lanyard, Absorber, etc.</li>
+      </ul>
+    </div>
+    
+    <!-- Working Personnel Name List -->
+    <div class="personnel-section">
+      <h3>Working Personnel Name List:</h3>
+      <table class="personnel-table" id="personnel-table">
+        <thead>
+          <tr>
+            <th>S/N</th>
+            <th>Name</th>
+            <th>PPE Checked</th>
+          </tr>
+        </thead>
+        <tbody id="personnel-tbody">
+          <!-- Rows will be added dynamically -->
+        </tbody>
+      </table>
+      <button type="button" class="add-personnel-btn" onclick="addPersonnelRow()">+ Add Personnel</button>
+    </div>
+    
+    <!-- Hazard Topics -->
+    <div class="hazard-section">
+      <h3>Hazard Topics:</h3>
+      
+      <div class="hazard-item">
+        <h4>A. Hazard and Risk controls for work activities are highlighted.</h4>
+        <div class="yesno-buttons" data-hazard="a">
+          <button type="button" class="yesno-btn yes" onclick="selectHazardYesNo(this, 'a')">Yes</button>
+          <button type="button" class="yesno-btn no" onclick="selectHazardYesNo(this, 'a')">No</button>
+        </div>
+        <div class="hazard-remarks">
+          <label>Remarks:</label>
+          <textarea name="hazard-a-remarks" placeholder="Enter remarks..."></textarea>
+        </div>
+      </div>
+      
+      <div class="hazard-item">
+        <h4>B. Safe work procedures are communicated.</h4>
+        <div class="yesno-buttons" data-hazard="b">
+          <button type="button" class="yesno-btn yes" onclick="selectHazardYesNo(this, 'b')">Yes</button>
+          <button type="button" class="yesno-btn no" onclick="selectHazardYesNo(this, 'b')">No</button>
+        </div>
+        <div class="hazard-remarks">
+          <label>Remarks:</label>
+          <textarea name="hazard-b-remarks" placeholder="Enter remarks..."></textarea>
+        </div>
+      </div>
+      
+      <div class="hazard-item">
+        <h4>C. Tools and equipment are checked in good order.</h4>
+        <div class="yesno-buttons" data-hazard="c">
+          <button type="button" class="yesno-btn yes" onclick="selectHazardYesNo(this, 'c')">Yes</button>
+          <button type="button" class="yesno-btn no" onclick="selectHazardYesNo(this, 'c')">No</button>
+        </div>
+        <div class="hazard-remarks">
+          <label>Remarks:</label>
+          <textarea name="hazard-c-remarks" placeholder="Enter remarks..."></textarea>
+        </div>
+      </div>
+      
+      <div class="hazard-item">
+        <h4>D. Correct PPE are used in good working condition.</h4>
+        <div class="yesno-buttons" data-hazard="d">
+          <button type="button" class="yesno-btn yes" onclick="selectHazardYesNo(this, 'd')">Yes</button>
+          <button type="button" class="yesno-btn no" onclick="selectHazardYesNo(this, 'd')">No</button>
+        </div>
+        <div class="hazard-remarks">
+          <label>Remarks:</label>
+          <textarea name="hazard-d-remarks" placeholder="Enter remarks..."></textarea>
+        </div>
+      </div>
+      
+      <div class="hazard-item">
+        <h4>E. Equipment protection and guarding available.</h4>
+        <div class="yesno-buttons" data-hazard="e">
+          <button type="button" class="yesno-btn yes" onclick="selectHazardYesNo(this, 'e')">Yes</button>
+          <button type="button" class="yesno-btn no" onclick="selectHazardYesNo(this, 'e')">No</button>
+        </div>
+        <div class="hazard-remarks">
+          <label>Remarks:</label>
+          <textarea name="hazard-e-remarks" placeholder="Enter remarks..."></textarea>
+        </div>
+      </div>
+      
+      <div class="hazard-item">
+        <h4>F. Emergency plan and procedures established and communicated.</h4>
+        <div class="yesno-buttons" data-hazard="f">
+          <button type="button" class="yesno-btn yes" onclick="selectHazardYesNo(this, 'f')">Yes</button>
+          <button type="button" class="yesno-btn no" onclick="selectHazardYesNo(this, 'f')">No</button>
+        </div>
+        <div class="hazard-remarks">
+          <label>Remarks:</label>
+          <textarea name="hazard-f-remarks" placeholder="Enter remarks..."></textarea>
+        </div>
+      </div>
+      
+      <div class="hazard-item">
+        <h4>G. Recent incidents or near misses are shared.</h4>
+        <div class="yesno-buttons" data-hazard="g">
+          <button type="button" class="yesno-btn yes" onclick="selectHazardYesNo(this, 'g')">Yes</button>
+          <button type="button" class="yesno-btn no" onclick="selectHazardYesNo(this, 'g')">No</button>
+        </div>
+        <div class="hazard-remarks">
+          <label>Remarks:</label>
+          <textarea name="hazard-g-remarks" placeholder="Enter remarks..."></textarea>
+        </div>
+      </div>
+      
+      <div class="hazard-item">
+        <h4>H. Q&A from working personnel conducted.</h4>
+        <div class="yesno-buttons" data-hazard="h">
+          <button type="button" class="yesno-btn yes" onclick="selectHazardYesNo(this, 'h')">Yes</button>
+          <button type="button" class="yesno-btn no" onclick="selectHazardYesNo(this, 'h')">No</button>
+        </div>
+        <div class="hazard-remarks">
+          <label>Remarks:</label>
+          <textarea name="hazard-h-remarks" placeholder="Enter remarks..."></textarea>
+        </div>
+      </div>
+      
+      <div class="other-topics">
+        <label for="other-topics-text">I. Other Topics Discussed (If any):</label>
+        <textarea id="other-topics-text" placeholder="Enter other topics discussed..."></textarea>
+      </div>
+    </div>
+    
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+      <strong>*Work supervisor(s) is/are to verify that all workers have complied to ALL safety requirements, and ensure all working personnel conduct Head-to-Toe PPE Check daily before commencement of work.</strong>
+    </div>
+    
+    <!-- Photo Upload Section -->
+    <div class="photo-section">
+      <div class="photo-section-header">
+        <span class="photo-section-title">Meeting Photos / Evidence:</span>
+        <button type="button" class="btn-add-photo" onclick="addPhoto()">+ Add Photo</button>
+      </div>
+      <div id="photos-container"></div>
+    </div>
+    
+    <!-- Signature Section -->
+    <div class="signature-section">
+      <div class="signature-field">
+        <label>Signature:</label>
+        <div class="signature-canvas-wrapper">
+          <canvas id="signature-canvas" class="signature-canvas"></canvas>
+        </div>
+        <div class="signature-actions">
+          <button type="button" class="btn-clear-signature" onclick="clearSignature()">🗑️ Clear Signature</button>
+        </div>
+        <div id="signature-confirmation" class="signature-confirmation">
+          ✅ Signature captured successfully
+        </div>
+      </div>
+    </div>
+    
+    <div class="action-buttons">
+      <button type="button" class="btn btn-print" onclick="window.print()">🖨️ Print to PDF</button>
+    </div>
+  </div>
+  
+  <script>
+    // Initialize date to today
+    document.getElementById('meeting-date').value = new Date().toISOString().slice(0, 10);
+    
+    // Personnel row counter
+    let personnelCount = 0;
+    
+    function addPersonnelRow() {
+      personnelCount++;
+      const tbody = document.getElementById('personnel-tbody');
+      
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${personnelCount}.</td>
+        <td><input type="text" placeholder="Enter name"></td>
+        <td>
+          <div class="yesno-buttons" style="justify-content: center;">
+            <button type="button" class="yesno-btn yes" onclick="selectPPEYesNo(this, ${personnelCount})">Yes</button>
+            <button type="button" class="yesno-btn no" onclick="selectPPEYesNo(this, ${personnelCount})">No</button>
+          </div>
+        </td>
+      `;
+      
+      tbody.appendChild(row);
+    }
+    
+    // Add initial rows (start with 5)
+    for (let i = 0; i < 5; i++) {
+      addPersonnelRow();
+    }
+    
+    // Yes/No button handlers for Hazard Topics
+    function selectHazardYesNo(btn, hazard) {
+      const container = document.querySelector(`[data-hazard="${hazard}"]`);
+      container.querySelectorAll('.yesno-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    
+    // Yes/No button handlers for Personnel PPE
+    function selectPPEYesNo(btn, rowId) {
+      const container = btn.closest('.yesno-buttons');
+      container.querySelectorAll('.yesno-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    
+    // Photo upload functionality
+    let photoCounter = 0;
+    
+    function addPhoto() {
+      photoCounter++;
+      const container = document.getElementById('photos-container');
+      
+      const photoEntry = document.createElement('div');
+      photoEntry.className = 'photo-entry';
+      photoEntry.id = `photo-${photoCounter}`;
+      photoEntry.innerHTML = `
+        <button type="button" class="btn-remove-photo" onclick="this.parentElement.remove()">×</button>
+        <div class="photo-upload-wrapper">
+          <label class="photo-upload-label">
+            <input type="file" class="photo-upload-input" accept="image/*" onchange="handlePhotoUpload(this, ${photoCounter})">
+            <div class="upload-icon">📷</div>
+            <div class="upload-text">Click to upload photo</div>
+          </label>
+        </div>
+        <div class="photo-preview" id="preview-${photoCounter}">
+          <img src="" alt="Photo preview">
+          <div class="photo-info"></div>
+        </div>
+        <div class="photo-comment">
+          <label>Photo Comment:</label>
+          <textarea class="photo-comment-input" placeholder="Describe this photo..." rows="2"></textarea>
+        </div>
+      `;
+      
+      container.appendChild(photoEntry);
+    }
+    
+    async function handlePhotoUpload(input, id) {
+      const file = input.files[0];
+      if (!file) return;
+      
+      const preview = document.getElementById(`preview-${id}`);
+      const previewImg = preview.querySelector('img');
+      const photoInfo = preview.querySelector('.photo-info');
+      
+      photoInfo.className = 'photo-info compressing';
+      photoInfo.textContent = '🔄 Compressing...';
+      preview.style.display = 'block';
+      
+      try {
+        if (file.type.startsWith('image/')) {
+          const compressed = await imageCompression(file, {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1200,
+            useWebWorker: true,
+            initialQuality: 0.85
+          });
+          
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            previewImg.src = ev.target.result;
+            photoInfo.className = 'photo-info';
+            photoInfo.textContent = `✅ ${compressed.name} (${(compressed.size/1024).toFixed(1)} KB)`;
+          };
+          reader.readAsDataURL(compressed);
+        }
+      } catch (err) {
+        console.warn('Compression failed, using original:', err);
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          previewImg.src = ev.target.result;
+          photoInfo.className = 'photo-info';
+          photoInfo.textContent = `⚠️ ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+    
+    // Signature Pad
+    const signatureCanvas = document.getElementById('signature-canvas');
+    let signaturePad;
+    
+    function initSignaturePad() {
+      if (typeof SignaturePad !== 'undefined') {
+        signaturePad = new SignaturePad(signatureCanvas, {
+          minWidth: 0.5,
+          maxWidth: 2.5,
+          penColor: '#000000',
+          backgroundColor: 'rgba(255, 255, 255, 0)'
+        });
+        
+        resizeCanvas();
+        
+        signaturePad.onEnd = function() {
+          if (!signaturePad.isEmpty()) {
+            document.getElementById('signature-confirmation').classList.add('visible');
+          }
+        };
+      }
+    }
+    
+    function resizeCanvas() {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      signatureCanvas.width = signatureCanvas.offsetWidth * ratio;
+      signatureCanvas.height = signatureCanvas.offsetHeight * ratio;
+      signatureCanvas.getContext('2d').scale(ratio, ratio);
+      signatureCanvas.getContext('2d').lineCap = 'round';
+      signatureCanvas.getContext('2d').lineJoin = 'round';
+    }
+    
+    function clearSignature() {
+      if (signaturePad) {
+        signaturePad.clear();
+        document.getElementById('signature-confirmation').classList.remove('visible');
+      }
+    }
+    
+    window.addEventListener('load', function() {
+      setTimeout(initSignaturePad, 100);
+    });
+    
+    window.addEventListener('resize', function() {
+      if (signaturePad) {
+        const data = signaturePad.toData();
+        resizeCanvas();
+        signaturePad.fromData(data);
+      }
+    });
+  </script>
+</body>
+</html>
